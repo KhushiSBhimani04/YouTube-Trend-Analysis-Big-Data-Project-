@@ -16,7 +16,7 @@ sc = SparkContext.getOrCreate()
 #Creating Spark Session
 spark = SparkSession(sc)
 #Readind data set(csv file),dropping null values and selecting only tabs and views column
-tags_views = spark.read.csv("file:///C:\\Users\\saikr\\Desktop\\DIC\\USvideos.csv", inferSchema = True, header = True).dropna().select("tags","views")
+tags_views = spark.read.csv("file:///C:\\Users\\Hp\\A BDA PROJECT\\Youtube-Big-data-Analytics-using-Spark-master\\USvideos.csv", inferSchema = True, header = True).dropna().select("tags","views")
 #Mapping by splitting tags with "|" character,
 def tags_split(x):
     tags=x["tags"].split("|")
@@ -32,7 +32,7 @@ rdd1=tags_views.rdd.flatMap(tags_split).reduceByKey(add)#reduce by similar tags 
 toptags=rdd1.takeOrdered(35, key = lambda x: -x[1])
 df=spark.createDataFrame(toptags)
 #Writing back to Disk
-df.repartition(1).write.csv(path="file:///C:\\Users\\saikr\\Desktop\\DIC\\trending.csv")
+df.repartition(1).write.csv(path="file:///D:\\trending.csv")
 #Spark session
 spark.stop()
 
